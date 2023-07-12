@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/destinymarie32601/employee-tracker#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^9.2.7",
     "mysql2": "^3.5.1"
   }
