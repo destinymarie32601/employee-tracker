@@ -14,7 +14,7 @@ INSERT INTO role (title, salary, department_id) VALUES
 ('Customer Service Representative', 60000, 4),
 ('Accountant', 80000, 5);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES
+INSERT INTO employee (first_name, last_name, manager_id, role_id) VALUES
 ('Jessica', 'Simpson', 1, 1),
 ('Jack', 'Rabbit', 1, 2),
 ('Janessa', 'Sarai', 2, 3),
@@ -24,4 +24,7 @@ INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES
 ('John', 'Stokes', 5, 7),
 ('Brandon', 'Johnson', 6, 8),
 
+SELECT * FROM department;
+SELECT * FROM role;
+SELECT * FROM employee;
 
