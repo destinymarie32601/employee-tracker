@@ -132,7 +132,7 @@ function addRole() {
             {
                 type: 'list',
                 message: 'What department does the role belong to?',
-                name: 'department_name',
+                name: 'department_id',
                 choices: departmentName
             }
         ])
@@ -141,13 +141,15 @@ function addRole() {
                     {
                         title: answers.role_name,
                         salary: answers.role_salary,
-                        department_id: answers.department_name
+                        department_id: answers.department_id,
                     },
                     function (err) {
                         if (err) throw err;
+                        console.log('Role added');
+                        viewAllRoles();
                     }
                 );
-                viewAllRoles()
+             
             });
     });
 };
