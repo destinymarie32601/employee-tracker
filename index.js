@@ -54,5 +54,13 @@ function start() { //prompt for user
 
     });
 }
+//show all departments
+function viewAllDepartments() {
+    connection.query('SELECT * FROM department', function (err, results) {
+        console.table(results);
+        start();
+
+    });
+}
 
 
