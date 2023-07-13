@@ -8,12 +8,16 @@ const connection = mysql.createConnection(
         host: 'localhost',
         user: 'root',
         password: '861#01Dd',
-        database: 'employee_db'
-    },
-    console.log(`You are connected to the company database.`)
-);
+        database: 'employeetracker_db'
+    });
 
-start();
+    connection.connect((err) => {
+        if (err) throw err;
+        console.log('Connected to the database');
+        start();
+    });
+
+
 
 function start() { //prompt for user
     inquirer
@@ -21,74 +25,65 @@ function start() { //prompt for user
             {
                 type: 'list',
                 message: 'What would you like to do?',
-                name: 'menu',
+                name: 'action',
                 choices: [
-                    'View all Departments',
-                    'View all Roles',
-                    'View all Employees',
-                    'Add a Department',
-                    'Add an Employee',
-                    'Add a Role',
-                    'Update an Employee Role']
-            }
+                    'View all departments',
+                    'View all roles',
+                    'View all employees',
+                    'Add a department',
+                    'Add an employee',
+                    'Add a role',
+                    'Update an employee role'
+                ],
+            },
         ])
 
-        .then((answers) => {
-            console.log(answers.menu);
-            switch (answers.menu) {
-                case 'View all Departments':
-                    viewAllDepartments();
-                    break;
-
-                case 'View all Roles':
-                    viewAllRoles();
-                    break;
-
-                case 'View all Employees':
-                    viewAllEmployees();
-                    break;
-
-                case 'Add a Department':
-                    addDepartment();
-                    break;
-
-                case 'Add an Employee':
-                    addEmployee();
-                    break;
-
-                case 'Add a Role':
-                    addRole();
-                    break;
-
-                case 'Update an Employee Role':
-                    updateEmployee();
-                    break;
-            }
-
-        })
-        .catch((err) => {
-            console.log(err);
+        .then((answer) => {
+           if (answer.action === 'View all departments') {
+            viewAllDepartments()
+           } else if (answer.action === 'View all roles' ) {
+            viewAllRoles()
+           } else if (answer.action === 'View all employees') {
+            viewAllEmployees()
+           } else if (answer.action === 'Add a department') {
+            addDepartment()
+           } else if (answer.action === 'Add a role') {
+            addRole()
+           } else if (answer.action === 'Add an employee') {
+            addEmployee()
+           } else if (answer.action === 'Update an employee role') {
+            updateEmployee()
+           } else {
+            console.log('Done');
+            connection.end();
+           }
+            
         });
 }
 //show all departments
 function viewAllDepartments() {
-    connection.query('SELECT * FROM department', function (err, results) {
-        console.table(results);
+    connection.query('SELECT * FROM department', (err, departments) => {
+        if (err) throw err;
+        console.table(departments);
         start();
     });
 }
 //view all roles
 
 function viewAllRoles() {
-    connection.query('SELECT * FROM role', function (err, results) {
-        console.table(results);
+    connection.query('SELECT * FROM role', (err, roles) => {
+       if (err) throw err;
+       console.table(roles);
         start();
     });
 }
 //view all employees
 function viewAllEmployees() {
-    connection.query('SELECT * FROM employee JOIN role ON employee.role_id = role.id', function (err, results) {
-        console.table(results);
+    const query = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+     From employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON employee.manager_id = manager.id`;
+    connection.query(query, (err, employees) => {
+        if (err) throw err;
+        console.table(employees);
         start();
     });
 }
