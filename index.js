@@ -135,7 +135,56 @@ function addRole () {
         });
     });
 };
+//add new employee
+function addEmployee () {
+    connection.query('SELECT * FROM role', (err, results) => {
+        let roleName = results.map((role) => {
+            return {
+                name:role.title,
+                value:role.id,
+            };
+        });
 
+        inquirer.prompt([
+            {
+                type:'input',
+                message:'What is the empoyees first name?',
+                name: 'first_name',
+            },
+            {
+                type:'input',
+                message:'What is the empoyees last name?',
+                name: 'last_name',
+            },
+            {
+                type:'input',
+                message:'What is the empoyees manager id?',
+                name: 'manager_id',
+            },
+            {
+                type:'list',
+                message:'What is the employees role?',
+                name: 'role',
+                choices: roleName
+            }
+
+        ])
+        .then((answer) => {
+            connection.query('INSERT INTO employee SET ?'
+            {
+                first_name: answer.first_name,
+                last_name: answer.last_name,
+                role_id: answer.role,
+                manager_id: answer.manager_id
+            },
+            function (err) {
+                if (err) throw err;
+            }
+            );
+            viewAllEmployees()
+        });
+    });
+};
 
 
 
